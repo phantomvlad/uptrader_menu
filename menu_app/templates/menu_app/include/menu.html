@@ -1,0 +1,41 @@
+{% load menu_tags %}
+
+<ul>
+  {% for item_main in main_categories %}
+    {% if item_main in active_categories %}
+      <li>
+		{{ item_main.title }}
+		{% if item_main == found_category %}
+			<ul>
+			  {% for child in item_main.children.all %}
+				<li>
+				  {{ child.title }}
+				</li>
+			  {% endfor %}
+			</ul>
+		{% else %}
+        	{% draw_children_menu item_main %}
+		{% endif %}
+      </li>
+    {% else %}
+      <li>
+        {{ item_main.title }}
+      </li>
+    {% endif %}
+  {% endfor %}
+</ul>
+
+{% block draw_children_menu %}
+  {% if children %}
+    <ul>
+      {% for child in children %}
+        <li>
+          {{ child.title }}
+          {% if child.children.all %}
+            {% draw_children_menu child %}
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}
